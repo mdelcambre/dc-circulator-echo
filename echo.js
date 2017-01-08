@@ -9,6 +9,7 @@
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
+circulator = require('./circulator.js');
 exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
@@ -95,7 +96,7 @@ function onSessionEnded(sessionEndedRequest, session) {
  * Start the web request to get the bus times from the api
  */
 function getNextBusResponse(session, callback){
-  require('./circulator.js').getArrivals(buildNextBusResponse.bind(this, session, callback));
+  circulator.getArrivals(buildNextBusResponse.bind(this, session, callback));
 }
 /**
  * Called to build the response with the bus times
@@ -104,8 +105,8 @@ function buildNextBusResponse(session, callback, times){
   var cardTitle = "Next Bus Time";
   var shouldEndSession = true;
 
-  if (!times  [0]){
-    var speechOutput = "No busses found.";
+  if (!times[0]){
+    var speechOutput = "No busses found or API error.
   } else if (!times[1]) {
     var speechOutput = "One bus arriving in " + times[0] + "minutes.";
   } else {

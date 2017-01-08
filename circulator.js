@@ -17,10 +17,12 @@ module.exports.getArrivals = getArrivals
 function getArrivals(callback){
    request(NB_URL, function (error, response, body) {
         if(error){
+            callback(false)
             return console.log('Error:', error);
         }
 
         if(response.statusCode !== 200){
+            callback(false)
             return console.log('Invalid Status Code Returned:', response.statusCode);
         }
 
